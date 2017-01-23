@@ -2,6 +2,39 @@
 <html>
 <head>
 <style>
+    
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+div.header {
+    color: #1abc9c;
+    line-height: 1;
+    text-align: center;
+    width: auto;
+}
+    
+h2 {
+    color: #716666;
+}
+    
+* {
+    font-family: Montserrat; 
+}
+    
+body {
+    line-height: 2;
+}
+    
+ a {
+    text-decoration: none;
+    color: #1abc9c;
+}
+    
+a:hover {
+    color: #bebcbc;
+    text-decoration: none;
+    outline: 0;
+}
+    
 button.accordion {
     background-color: #eee;
     color: #444;
@@ -12,6 +45,7 @@ button.accordion {
     text-align: left;
     outline: none;
     font-size: 15px;
+    font-family: Montserrat;
     transition: 0.4s;
 }
 
@@ -42,51 +76,53 @@ div.panel {
 </head>
 <body>
     
+<div class="header">    
  <h1> <a href="http://www.public.asu.edu/~msbenso1/">Meera Benson</a></h1>
-      <h2> (520) 465 - 1049 </h2>
-      <h2> <a href="mailto:msbenso1@asu.edu">msbenso1@asu.edu</a> </h2>
+ <h3> (520) 465 - 1049 </h3>
+ <h3> <a href="mailto:msbenso1@asu.edu">msbenso1@asu.edu</a> </h3>
+</div>
 
 <button class="accordion">Skills</button>
 <div class="panel">
   <ul>
-        <li>Knowledgeable in C/C++, Java, Swift, and HTML/CSS</li>
-        <li>Experienced with Visual Studio, Linux, and MATLAB</li>
-        <li>Adept at Photoshop and Illustrator</li>
-        <li>Very creative, strong analytical thinking, communication, and teamwork</li>
-    </ul>
+    <li>Knowledgeable in C/C++, Java, Swift, and HTML/CSS</li>
+    <li>Experienced with Visual Studio, Linux, and MATLAB</li>
+    <li>Adept at Photoshop and Illustrator</li>
+    <li>Very creative, strong analytical thinking, communication, and teamwork</li>
+  </ul>
 </div>
 
 <button class="accordion">Education</button>
 <div class="panel">
-  <p>Arizona State University, Barrett Honors College, Tempe AZ</p>
-    <p>President's Award Scholar</p>
-    <p>Major: Computer Science; Minor: Digital Culture</p>
-    <p>GPA: 4.07, Dean's List Fall 2014 - Fall 2016</p>
-    <p>Graduation Date: Spring 2018</p>
+  <p>&nbsp &nbsp Arizona State University, Barrett Honors College, Tempe AZ<br/>
+    &nbsp &nbsp President's Award Scholar<br/>
+    &nbsp &nbsp Major: Computer Science; Minor: Digital Culture<br/>
+    &nbsp &nbsp GPA: 4.07, Dean's List Fall 2014 - Fall 2016<br/>
+    &nbsp &nbsp Graduation Date: Spring 2018<br/></p>
 </div>
 
 <button class="accordion">Relevant Courses</button>
 <div class="panel">
   <p><b>CSE470: Computer Graphics</b> (Spring 2017)</p>
-        <ul>
-            <li>Will study concepts of interactive computer graphics, realistic rendering, and 3-D viewing</li>
-            <li>Develop interactive, real-time rendering applications using OpenGL</li>
-        </ul>
+    <ul>
+        <li>Will study concepts of interactive computer graphics, realistic rendering, and 3-D viewing</li>
+        <li>Develop interactive, real-time rendering applications using OpenGL</li>
+    </ul>
+    
+    <p><b>CSE430: Operating Systems</b> (Grade A)</p>
+    <ul>
+        <li>Studied operating system structure, processor scheduling, synchronization techniques, and memory management </li>
+    </ul>
         
-        <p><b>CSE430: Operating Systems</b> (Grade A)</p>
-        <ul>
-            <li>Studied operating system structure, processor scheduling, synchronization techniques, and memory management </li>
-        </ul>
+    <p><b>CSE340: Principles of Programming Languages</b> (Grade A-)</p>
+    <ul>
+        <li>Created language lexers and parsers, learned formal syntactic/semantic descriptions, and theoretical foundations for several programming paradigms</li>
+    </ul>
         
-        <p><b>CSE340: Principles of Programming Languages</b> (Grade A-)</p>
-        <ul>
-            <li>Created language lexers and parsers, learned formal syntactic/semantic descriptions, and theoretical foundations for several programming paradigms</li>
-        </ul>
-        
-        <p><b>CSE310: Data Structures and Algorithms</b> (Grade A+)</p>
-        <ul>
-            <li>Studied advanced concepts including stacks, queues, hashing, and searching/sorting algorithms</li>
-        </ul>
+    <p><b>CSE310: Data Structures and Algorithms</b> (Grade A+)</p>
+    <ul>
+        <li>Studied advanced concepts including stacks, queues, hashing, and searching/sorting algorithms</li>
+    </ul>
 </div>
     
 <button class="accordion">Awards & Interests</button>
