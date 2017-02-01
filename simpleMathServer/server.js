@@ -10,6 +10,24 @@ app.get("/", function (req, res) {
       res.redirect("/index.html");
 });
 
+
+var addCallback = function (req, res) {
+    var a = parseFloat(req.query.a);
+    var b = parseFloat(req.query.b);
+    var result  = a + b;
+
+    res.send(result.toString()); // send response body
+}
+
+app.get("/add", addCallback);
+app.get("/sub", subCallback);
+app.get("/mult", multCallback);
+app.get("/div", divCallback);
+
+
+
+
+
 app.use(methodOverride());
 app.use(bodyParser());
 app.use(express.static(__dirname + '/public'));
