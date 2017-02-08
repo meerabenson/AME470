@@ -10,47 +10,19 @@ app.get("/", function (req, res) {
       res.redirect("/index.html");
 });
 
+
 var todoList = [];
 
+
 var addCallback = function (req, res) {
-   console.log(req.query);
-   todoList.push(req.query);
-    res.send("1"); // send response body
+    console.log(req.query);
+    todoList.push(req.query);
+
 }
+    res.send("Todo added!");
 
 
-var subCallback = function (req, res) {
-    var a = parseFloat(req.query.a);
-    var b = parseFloat(req.query.b);
-    var result  = a - b;
-
-    res.send(result.toString()); // send response body
-}
-
-
-var multCallback = function (req, res) {
-    var a = parseFloat(req.query.a);
-    var b = parseFloat(req.query.b);
-    var result  = a * b;
-
-    res.send(result.toString()); // send response body
-}
-
-
-var divCallback = function (req, res) {
-    var a = parseFloat(req.query.a);
-    var b = parseFloat(req.query.b);
-    var result  = a / b;
-
-    res.send(result.toString()); // send response body
-}
-
-app.get("/add", addCallback);
-app.get("/sub", subCallback);
-app.get("/mult", multCallback);
-app.get("/div", divCallback);
-
-
+app.get("/addTodo", addCallback);
 
 
 
