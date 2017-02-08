@@ -17,9 +17,9 @@ var todoList = [];
 var addCallback = function (req, res) {
     console.log(req.query);
     todoList.push(req.query);
-
-}
     res.send("Todo added!");
+}
+
 
 
 app.get("/addTodo", addCallback);
