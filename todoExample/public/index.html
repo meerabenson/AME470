@@ -4,21 +4,20 @@
   <script src='asyncReq.js'> </script>
 
   <script>
-   function addNew(){
-     var todo = prompt("Enter New Todo");
-     alert(todo);
-     /*
-     var url = "./" + op + "?a=" + a + "&b=" + b;
-     console.log(url);
-     loadFile(    )
-   }
+    function addNew(){
+      var todo = prompt("Enter New Todo:");
+      var id = new Date().getTime();
+      var url = "./addTodo" + "?id=" + id + "&todo=" + todo;
+      console.log(url);
+      loadFile(url ,function(d){alert(d)})
+    }
   </script>
 </head>
 
 <body>
-  <h1>Todos</h1>  
+  <h1> Todos </h1>
   <button onclick='addNew()'> Add </button>
-  <div id='todoListWrapper'></div>
+  <div id='todoListWrapper'> </div>
 </body>
 
 </html>
