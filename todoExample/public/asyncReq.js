@@ -46,4 +46,8 @@ function loadFile(filename, callback)
         //Oh no, the XMLHttpRequest object couldn't be instantiated.
         alert("A problem occurred instantiating the XMLHttpRequest object.");
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e7f61bad9f42e7a4661a16e8a5b5ac8a12ef9ceb
