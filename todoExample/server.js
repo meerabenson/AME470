@@ -11,22 +11,25 @@ app.get("/", function (req, res) {
 });
 
 
-var addCallback = function (req, res) {
-    var a = parseFloat(req.query.a);
-    var b = parseFloat(req.query.b);
-    var result  = a + b;
-
-    res.send(result.toString()); // send response body
-}
-
-app.get("/add", addCallback);
-app.get("/sub", subCallback);
-app.get("/mult", multCallback);
-app.get("/div", divCallback);
+var todoList = [];
 
 
 
+app.get("/addTodo", function (req, res) {
+    todoList.push(req.query);
+    res.send(JSON.stringify(todoList));
+});
 
+
+app.get("/deleteTodo", function (req, res) {
+    var index = parseInt(req.query.index);
+    todoList.splice(index,1);
+    res.send(JSON.stringify(todoList));
+});
+
+app.get("/getTodos", function (req, res) {
+    res.send(JSON.stringify(todoList));
+});
 
 app.use(methodOverride());
 app.use(bodyParser());
