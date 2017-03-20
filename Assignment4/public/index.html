@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+  <script src='asyncReq.js'> </script>
+  <script>
+      
+    var currentId = 0;
+      
+    function addNew(){
+      var name = prompt("Enter the image name:");
+      var photoURL = prompt("Enter the image URL:");
+      var id = new Date().getTime();
+      
+      if (name != null && photoURL != null) {
+      var url = "./addTodo" + "?id=" + id + "&name=" + name + "&url=" + photoURL;
+      loadFile(url ,function(d){
+        formatTodos(JSON.parse(d));
+      });
+      }
+    }
+    function deleteTodo(index){
+      var flag = confirm("Are you sure you want to delete?");
+      if(flag){
+        var url = "./deleteTodo" + "?id=" + index;
+        loadFile(url ,function(d){
+          formatTodos(JSON.parse(d));
+        });
+      }
+    }
+      
+      
+      function rename(index){
+        var newname = prompt("Enter a new name:");
+        var url = "./renamePhoto" + "?id=" + index + "?newname=" + newname;
+          
+        loadFile(url ,function(d){
+          formatTodos(JSON.parse(d));
+        });
+    }
+      
+    function formatTodos(list)
+    {
+      var markup = "";
+      if(list.length == 0){
+        markup = "No pictures yet"
+      }
+      else{
+        for(var i = 0; i < list.length; i++){
+            var a = list[i].url;
+          markup += "<li class='thumbnails' id='" + list[i].id + "' onclick='showLarger(\"" + list[i].url + "\", \"" + list[i].name + "\", \"" + list[i].id + "\")'>" + list[i].name +
+            "<button class='delButton' onclick='deleteTodo(" + list[i].id + ")'> X </button>"+"<div id='" + list[i].id + "' class='thumb' style='background-image:url(" + list[i].url + "')> </div>" +
+            "</li> <br/>"; 
+            
+        }
+      }
+      document.getElementById("todoListWrapper").innerHTML = markup;
+    }
+    function start()
+    {
+        document.getElementById("rename").style.display = 'none';
+            
+        
+      var url = "./getTodos";
+      loadFile(url ,function(d){
+        console.log(d);
+        formatTodos(JSON.parse(d));
+      })
+    }
+      
+      function showLarger(url, name, id)
+    {
+      console.log(name, id);
+        var u = "url(" + url + ")";
+        var thumbs = document.getElementsByClassName("thumbnails"), i, len;
+        document.getElementById("enlarge").style.backgroundImage=u;
+        document.getElementById("picName").innerHTML = name;
+        
+        for(i = 0, len = thumbs.length; i < len; i++)
+            thumbs[i].style.backgroundColor = 'white';
+        document.getElementById(id).style.backgroundColor = 'yellow';
+        
+        currentId = id;
+        document.getElementById("rename").style.display = 'block';
+    }
+      
+  </script>
+  <style>
+      h1{
+        text-align: center;
+      }
+      #addButton
+      {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+      .delButton
+      {
+          float: right;
+      }      
+      .thumb{
+          height:60px;
+          width:60px;
+          background-position: 50%;
+          background-size: cover;
+      }
+      .enlarge{
+          height:200px;
+          width:200px;
+          background-position: 50%;
+          background-size: cover;
+      }
+      
+}
+  </style>
+</head>
+
+<body onload='start()'>
+  <h1> My Image Collection </h1>
+  <button id='addButton' onclick='addNew()'> + </button>
+   <div style="float:left; width:50%">
+    <ul style="list-style-type:none; padding-left:0" id='todoListWrapper'> 
+</ul>
+       
+    </div>
+   <div style="float:right; width:50%">
+    <center><div id='enlarge' class='enlarge'> </div>
+       <div id='picName'></div>
+        <br/>
+       <button id='rename' onclick='rename(currentId)' style='margin: 0px auto'>Rename</button></center>
+   </div>
+  
+</body>
+
+</html>
