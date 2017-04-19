@@ -1,9 +1,8 @@
 <!doctype html>
 <html>
 <head>
-<<<<<<< HEAD
-    <meta name="viewport" content="intial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1.0"> 
-  <script src='asyncReq.js'> </script>
+<meta name="viewport" content="intial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1.0"> 
+<script src='asyncReq.js'> </script>
 <script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
   <script>
       
@@ -15,12 +14,6 @@
       document.getElementById("DRFrame").src = "./demo/index.html#" + url;
     document.getElementById("editWrapper").style.display = "block";
     }
-=======
-  <script src='asyncReq.js'> </script>
-  <script>
-      
-    var currentId = 0;
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
       
     function addNew(){
       var name = prompt("Enter the image name:");
@@ -35,45 +28,30 @@
       }
     }
     function deleteTodo(index){
-<<<<<<< HEAD
-        console.log(index);
-=======
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
       var flag = confirm("Are you sure you want to delete?");
       if(flag){
         var url = "./deleteTodo" + "?id=" + index;
         loadFile(url ,function(d){
           formatTodos(JSON.parse(d));
         });
-<<<<<<< HEAD
-          
         document.getElementById("enlarge").style.display = 'none';
         document.getElementById("picName").style.display = 'none';
         document.getElementById("buttons").style.display = 'none';
           
-=======
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
       }
     }
       
       
-<<<<<<< HEAD
       function rename(){
           
         var newname = prompt("Enter a new name:");
           
         if (newname != null) {  
         var url = "./renamePhoto" + "?id=" + currentId + "&newname=" + newname;
-=======
-      function rename(index){
-        var newname = prompt("Enter a new name:");
-        var url = "./renamePhoto" + "?id=" + index + "?newname=" + newname;
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
           
         loadFile(url ,function(d){
           formatTodos(JSON.parse(d));
         });
-<<<<<<< HEAD
           
         var url2 = "./getTodos";
       loadFile(url2 ,function(d){
@@ -87,8 +65,7 @@
           document.getElementById("buttons").style.display = 'block'; 
            //document.getElementById(currentId).style.backgroundColor = 'blue';
         }
-=======
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
+
     }
       
     function formatTodos(list)
@@ -100,20 +77,13 @@
       else{
         for(var i = 0; i < list.length; i++){
             var a = list[i].url;
-<<<<<<< HEAD
           markup += "<li class='thumbnails' id='" + list[i].id + "' onclick='showLarger(\"" + list[i].url + "\", \"" + list[i].name + "\", \"" + list[i].id + "\")'> <div id='" + list[i].id + "' class='thumb' style='background-image:url(" + list[i].url + "')> </div> </br> <div style='height:41.5px'> &nbsp &nbsp" + list[i].name + 
-            "</div> </li><br/>"; 
-=======
-          markup += "<li class='thumbnails' id='" + list[i].id + "' onclick='showLarger(\"" + list[i].url + "\", \"" + list[i].name + "\", \"" + list[i].id + "\")'>" + list[i].name +
-            "<button class='delButton' onclick='deleteTodo(" + list[i].id + ")'> X </button>"+"<div id='" + list[i].id + "' class='thumb' style='background-image:url(" + list[i].url + "')> </div>" +
-            "</li> <br/>"; 
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
-            
+            "</div> </li><br/>";             
         }
       }
       document.getElementById("todoListWrapper").innerHTML = markup;
     }
-<<<<<<< HEAD
+
       
     var touch = null;
     var mouse = null;
@@ -161,12 +131,6 @@
     {
        parseUA();
        console.log(currentId); document.getElementById("buttons").style.display = 'none'; 
-=======
-    function start()
-    {
-        document.getElementById("rename").style.display = 'none';
-            
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
         
       var url = "./getTodos";
       loadFile(url ,function(d){
@@ -178,14 +142,8 @@
       function showLarger(url, name, id)
     {
       console.log(name, id);
-<<<<<<< HEAD
         var thumbs = document.getElementsByClassName("thumbnails"), i, len;
         document.getElementById("enlarge").src=url;
-=======
-        var u = "url(" + url + ")";
-        var thumbs = document.getElementsByClassName("thumbnails"), i, len;
-        document.getElementById("enlarge").style.backgroundImage=u;
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
         document.getElementById("picName").innerHTML = name;
         
         for(i = 0, len = thumbs.length; i < len; i++)
@@ -193,11 +151,9 @@
         document.getElementById(id).style.backgroundColor = 'yellow';
         
         currentId = id;
-<<<<<<< HEAD
         document.getElementById("buttons").style.display = 'block';
          document.getElementById("enlarge").style.display = 'block';
         document.getElementById("picName").style.display = 'block';
-
     }
       
     var fileUploaded = function()
@@ -269,20 +225,15 @@
       document.getElementById("DRFrame").src = "";
       document.getElementById("editWrapper").style.display = "none";
     }
-
     function editImage(){
       var url = document.getElementById("enlarge").src;
       document.getElementById("DRFrame").src = "./demo/index.html#" + url;
       document.getElementById("editWrapper").style.display = "block";
       sessionStorage.setItem("isEdited", "false");
-=======
-        document.getElementById("rename").style.display = 'block';
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
     }
       
   </script>
   <style>
-<<<<<<< HEAD
       .mouse #todoListWrapper li:hover, .touch #todoListWrapper li:active
       {
           background-color: yellow;
@@ -294,17 +245,6 @@
       {
         position: relative;
           float: right;
-
-=======
-      h1{
-        text-align: center;
-      }
-      #addButton
-      {
-        position: absolute;
-        top: 20px;
-        right: 20px;
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
       }
       .delButton
       {
@@ -315,7 +255,6 @@
           width:60px;
           background-position: 50%;
           background-size: cover;
-<<<<<<< HEAD
           float:left;
           display: inline;
       }
@@ -370,37 +309,21 @@
               float: right;
               width: 50%;
           }
-=======
-      }
-      .enlarge{
-          height:200px;
-          width:200px;
-          background-position: 50%;
-          background-size: cover;
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
       }
       
 }
   </style>
 </head>
-
 <body onload='start()'>
-<<<<<<< HEAD
     <input type='file' id='theFileUploader' onchange='fileUploaded()'> 
     <div id='topButtons'>
         <button id='addButton' onclick='addNew()'> Upload URL </button></div>
     <h1> My Image Collection </h1>
    <div class='left'>
-=======
-  <h1> My Image Collection </h1>
-  <button id='addButton' onclick='addNew()'> + </button>
-   <div style="float:left; width:50%">
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
     <ul style="list-style-type:none; padding-left:0" id='todoListWrapper'> 
 </ul>
        
     </div>
-<<<<<<< HEAD
    <div class='right'>
     <center><img id='enlarge' class='enlarge'>
        <div id='picName'></div>
@@ -419,17 +342,4 @@
     </div>
   
 </body>
-
 </html>
-=======
-   <div style="float:right; width:50%">
-    <center><div id='enlarge' class='enlarge'> </div>
-       <div id='picName'></div>
-        <br/>
-       <button id='rename' onclick='rename(currentId)' style='margin: 0px auto'>Rename</button></center>
-   </div>
-  
-</body>
-
-</html>
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4

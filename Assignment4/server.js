@@ -1,11 +1,8 @@
-<<<<<<< HEAD
 var fs = require('fs');
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./credentials.json');
 var s3 = new AWS.S3();
 
-=======
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
 var express = require("express");
 var server = express();
 var bodyParser = require('body-parser');
@@ -14,7 +11,6 @@ var methodOverride = require('method-override');
 var hostname = process.env.HOSTNAME || 'localhost';
 var port = 8080;
 
-<<<<<<< HEAD
 server.use(methodOverride());
 //app.use(bodyParser());
 server.use(require('connect').bodyParser());
@@ -33,8 +29,6 @@ server.get("/", function (req, res) {
 });
 
 
-=======
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
 var db = require('mongoskin').db('mongodb://user:pwd@127.0.0.1:27017/pictures');
 
 server.get("/", function (req, res) {
@@ -93,7 +87,6 @@ server.get("/renamePhoto", function (req, res) {
 
     var i = req.query.id.toString();
     var rename = req.query.newname.toString();
-<<<<<<< HEAD
     console.log(i, rename);    
     
     db.collection("data").update({id: i}, {$set: {name: rename}});
@@ -143,23 +136,7 @@ server.post('/uploadFile', function(req, res){
             });
         });
   });
-=======
-    console.log("here");    
-    
-    db.collection("data").update({i: id}, {$set: {name: rename}});
-    
-    /*db.collection("data").insert(req.query, function(err, result){
-      if(err){
-        res.send("error"); 
-      }
-      else{
-        db.collection("data").find({}).toArray( function(err1, result1) {
-          res.send(JSON.stringify(result1));
-        });
-      }
-  });*/
-});
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
+
 
 server.use(methodOverride());
 server.use(bodyParser());
@@ -167,8 +144,4 @@ server.use(express.static(__dirname + '/public'));
 server.use(errorHandler());
 
 console.log("Simple static server listening at http://" + hostname + ":" + port);
-<<<<<<< HEAD
 server.listen(port);
-=======
-server.listen(port);
->>>>>>> c7fe274eb1c0ad8dc920934b229d428f4fd77ad4
