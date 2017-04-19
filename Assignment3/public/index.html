@@ -6,14 +6,9 @@
   <script>
     function calc(){
       var a = document.getElementById("valA").value;
-<<<<<<< HEAD
       var e = eval(a);
       var url = "./eval?a=" + a;
-      loadFile(url ,function(d){alert(e)})
-=======
-      var url = "./eval?a=" + a;
-      loadFile(url ,function(d){alert(d)})
->>>>>>> e7f61bad9f42e7a4661a16e8a5b5ac8a12ef9ceb
+      loadFile(url ,function(d){alert(a)})
     }
   </script>
 </head>

@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="intial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1.0"> 
+  <script src='asyncReq.js'> </script>
+<script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
+  <script>
+      
+    var currentId = 0;
+    var isEdited = false;
+      
+    function editImage(){
+      var url = document.getElementById("enlarge").src.replace('url("', "").replace('")','');
+      document.getElementById("DRFrame").src = "./demo/index.html#" + url;
+    document.getElementById("editWrapper").style.display = "block";
+    }
+      
+    function addNew(){
+      var name = prompt("Enter the image name:");
+      var photoURL = prompt("Enter the image URL:");
+      var id = new Date().getTime();
+      
+      if (name != null && photoURL != null) {
+      var url = "./addTodo" + "?id=" + id + "&name=" + name + "&url=" + photoURL;
+      loadFile(url ,function(d){
+        formatTodos(JSON.parse(d));
+      });
+      }
+    }
+    function deleteTodo(index){
+        console.log(index);
+      var flag = confirm("Are you sure you want to delete?");
+      if(flag){
+        var url = "./deleteTodo" + "?id=" + index;
+        loadFile(url ,function(d){
+          formatTodos(JSON.parse(d));
+        });
+          
+        document.getElementById("enlarge").style.display = 'none';
+        document.getElementById("picName").style.display = 'none';
+        document.getElementById("buttons").style.display = 'none';
+          
+      }
+    }
+      
+      
+      function rename(){
+          
+        var newname = prompt("Enter a new name:");
+          
+        if (newname != null) {  
+        var url = "./renamePhoto" + "?id=" + currentId + "&newname=" + newname;
+          
+        loadFile(url ,function(d){
+          formatTodos(JSON.parse(d));
+        });
+          
+        var url2 = "./getTodos";
+      loadFile(url2 ,function(d){
+        console.log(d);
+        formatTodos(JSON.parse(d));
+      })
+      document.getElementById("picName").innerHTML = newname;
+   
+          console.log("current id: " + currentId);
+          
+          document.getElementById("buttons").style.display = 'block'; 
+           //document.getElementById(currentId).style.backgroundColor = 'blue';
+        }
+    }
+      
+    function formatTodos(list)
+    {
+      var markup = "";
+      if(list.length == 0){
+        markup = "No pictures yet"
+      }
+      else{
+        for(var i = 0; i < list.length; i++){
+            var a = list[i].url;
+          markup += "<li class='thumbnails' id='" + list[i].id + "' onclick='showLarger(\"" + list[i].url + "\", \"" + list[i].name + "\", \"" + list[i].id + "\")'> <div id='" + list[i].id + "' class='thumb' style='background-image:url(" + list[i].url + "')> </div> </br> <div style='height:41.5px'> &nbsp &nbsp" + list[i].name + 
+            "</div> </li><br/>"; 
+            
+        }
+      }
+      document.getElementById("todoListWrapper").innerHTML = markup;
+    }
+      
+    var touch = null;
+    var mouse = null;
+    var ios = null;
+    var android = null;
+    var iphone = null;
+      
+    function parseUA() {
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.indexOf("iphone")>=0) {
+            iphone = true;
+            ios = true;
+            touch = true;
+            android = false;
+            mouse = false;
+        }
+        else if(ua.indexOf("android") >= 0){
+            iphone = false;
+            ios = false;
+            touch = true;
+            android = true;
+            mouse = false;
+        }
+        else if(ua.indexOf("ipad") >= 0){
+            iphone = false;
+            ios = true;
+            touch = true;
+            android = false;
+            mouse = false;
+        }
+        else {
+            iphone = false;
+            ios = false;
+            touch = false;
+            android = false;
+            mouse = true;
+        }
+        if(mouse)
+            $("body").addClass("mouse");
+        else
+            $("body").addClass("touch");
+    }
+      
+    function start()
+    {
+       parseUA();
+       console.log(currentId); document.getElementById("buttons").style.display = 'none'; 
+        
+      var url = "./getTodos";
+      loadFile(url ,function(d){
+        console.log(d);
+        formatTodos(JSON.parse(d));
+      })
+    }
+      
+      function showLarger(url, name, id)
+    {
+      console.log(name, id);
+        var thumbs = document.getElementsByClassName("thumbnails"), i, len;
+        document.getElementById("enlarge").src=url;
+        document.getElementById("picName").innerHTML = name;
+        
+        for(i = 0, len = thumbs.length; i < len; i++)
+            thumbs[i].style.backgroundColor = 'white';
+        document.getElementById(id).style.backgroundColor = 'yellow';
+        
+        currentId = id;
+        document.getElementById("buttons").style.display = 'block';
+         document.getElementById("enlarge").style.display = 'block';
+        document.getElementById("picName").style.display = 'block';
+
+    }
+      
+    var fileUploaded = function()
+    {
+       var file = $('#theFileUploader').get(0);
+       var fileObj = $('#theFileUploader').get(0).files[0]
+       var filename = fileObj.name;
+       var ext = filename.split(".");
+       ext = ext[ext.length-1];
+       console.log(ext);
+        
+       var fd = new FormData();
+       var fileInput = "s3Upload_" + new Date().getTime().toString() + "." + ext;
+       fd.append('fileInput', fileInput);
+       fd.append('input', file.files[0]);
+       fd.append('date', (new Date()).toString());
+        //fd.append('data', data);
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(e) {  
+          if (xhr.readyState != 4) { return; }
+            // callback logic
+           //document.getElementById("preview").src = "https://s3-us-west-2.amazonaws.com/ame470s17/" + fileInput;
+        };
+        xhr.open("POST", "/uploadFile", true);
+        xhr.send(fd);
+        
+        var name = prompt("Enter the image name:");
+      var photoURL = "https://s3-us-west-2.amazonaws.com/ame470s17/" + fileInput;
+      var id = new Date().getTime();
+      
+      
+      if (name != null && photoURL != null) {
+      var url = "./addTodo" + "?id=" + id + "&name=" + name + "&url=" + photoURL;
+      loadFile(url ,function(d){
+        formatTodos(JSON.parse(d));
+      });
+      }
+        
+        document.getElementById("theFileUploader").src = ""; //photoURL;
+        
+    }
+    
+    function saveImageEdit(){
+      if(sessionStorage.getItem("isEdited") == "true"){
+         var fd = new FormData();
+         var fileInput = document.getElementById("enlarge").src.split("ame470s17/")[1];
+         fileInput = fileInput.split("?")[0];
+         fd.append('fileInput', fileInput);
+         fd.append('date', (new Date()).toString());
+         fd.append('data', sessionStorage.getItem("editedImage"));
+          //fd.append('data', data);
+          var xhr = new XMLHttpRequest();
+          xhr.onreadystatechange = function(e) {  
+            cancelImageEdit();
+            if (xhr.readyState != 4) { return; }
+              // callback logic
+            document.getElementById("enlarge").src = "https://s3-us-west-2.amazonaws.com/ame470s17/" + fileInput + "?t=" + new Date().getTime();
+          };
+          xhr.open("POST", "/uploadImage", true);
+          xhr.send(fd);
+          
+          //update thumbnail
+          document.getElementById(currentId).src = "https://s3-us-west-2.amazonaws.com/ame470s17/" + fileInput + "?t=" + new Date().getTime(); ;
+      }
+    }
+      
+    function cancelImageEdit()
+    {
+      document.getElementById("DRFrame").src = "";
+      document.getElementById("editWrapper").style.display = "none";
+    }
+
+    function editImage(){
+      var url = document.getElementById("enlarge").src;
+      document.getElementById("DRFrame").src = "./demo/index.html#" + url;
+      document.getElementById("editWrapper").style.display = "block";
+      sessionStorage.setItem("isEdited", "false");
+    }
+      
+  </script>
+  <style>
+      .mouse #todoListWrapper li:hover, .touch #todoListWrapper li:active
+      {
+          background-color: yellow;
+      }
+      h1{
+        text-align: center;
+      }
+      #topButtons
+      {
+        position: relative;
+          float: right;
+
+      }
+      .delButton
+      {
+          float: right;
+      }      
+      .thumb{
+          height:60px;
+          width:60px;
+          background-position: 50%;
+          background-size: cover;
+          float:left;
+          display: inline;
+      }
+      .enlarge{
+          max-width:80%;
+          max-height:80%;
+          background-position: 50%;
+          
+      }
+      
+      #editWrapper{
+          float: right;
+          position: fixed;
+          display: none;
+          height: 100%;
+          width: 100%;
+          background: rgba(0,0,0,0.5);
+          top: 0px;
+          left:0px;
+          
+      }
+      
+      
+       #editWrapper button{
+          //float: left;
+          //position: fixed;
+          
+      }
+      #DRFrame{
+          height: 100%;
+          width: 100%;
+          
+      }
+      
+      @media (max-width: 400px) {
+          .left {
+              width: 100%;
+              float:inherit;
+          }
+          .right {
+              width: 100%;
+              float: inherit;
+          }
+      }
+      
+      @media (min-width: 400px) {
+          .left {
+              float: left;
+              width: 50%;
+          }
+          .right {
+              float: right;
+              width: 50%;
+          }
+      }
+      
+}
+  </style>
+</head>
+
+<body onload='start()'>
+    <input type='file' id='theFileUploader' onchange='fileUploaded()'> 
+    <div id='topButtons'>
+        <button id='addButton' onclick='addNew()'> Upload URL </button></div>
+    <h1> My Image Collection </h1>
+   <div class='left'>
+    <ul style="list-style-type:none; padding-left:0" id='todoListWrapper'> 
+</ul>
+       
+    </div>
+   <div class='right'>
+    <center><img id='enlarge' class='enlarge'>
+       <div id='picName'></div>
+        <br/>
+       <div id='buttons'><button id='rename' onclick='rename(currentId)' style='margin: 0px auto'>Rename</button>
+        <button id='edit' onclick='editImage()' style='margin: 0px auto'>Edit</button>
+       <button id='delete' onclick='deleteTodo(currentId)' style='margin: 0px auto'>Delete</button></div>
+       </center>
+   </div>
+    
+    <div id='editWrapper'>
+        <button style='' onclick='saveImageEdit()'>Save</button>
+        <button style='position: inherit' onclick='cancelImageEdit()'>Cancel</button>
+        <iframe crossorigin='anonymous' id='DRFrame'></iframe>
+        
+    </div>
+  
+</body>
+
+</html>
