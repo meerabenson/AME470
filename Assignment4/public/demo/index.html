@@ -18,6 +18,11 @@
         <div class="figure-wrapper">
           <figure class="image-container target">
             <img crossorigin='anonymous' src="" alt="" id="target">
+              <br/>
+            Brightness <input type="range" onchange="filters()" id="brightness" min="0" max="200" step="20" value="100"> <br/>
+        Saturate <input type="range" onchange="filters()" id="saturate" min="0" max="200" step="20" value="100"> <br/>
+        Sepia <input type="range" onchange="filters()" id="sepia" min="0" max="100" step="10" value="0"> <br/>
+        Contrast <input type="range" onchange="filters()" id="contrast" min="0" max="200" step="20" value="100"> <br/>
 
             <figcaption id='caption' class="image-meta">
             </figcaption>
@@ -39,13 +44,20 @@
       // Size options
       minWidth: 100,
       minHeight: 100,
-      maxWidth: 600,
+      maxWidth: document.documentElement.clientWidth,
       maxHeight: 500,
       ratio: 4/3,
       backgroundColor: '#000',
       // Plugins options
       plugins: {
-        //save: false,
+        /*save: {
+      callback: function() {
+        sessionStorage.setItem("editedImage", dkrm.canvas.toDataURL());
+            sessionStorage.setItem("isEdited", "true");
+            
+            var c = dkrm.canvas;
+            
+            applyFilter(c); }}, */
         crop: {
           quickCropKey: 67, //key "c"
           //minHeight: 50,
@@ -59,11 +71,39 @@
         // cropPlugin.selectZone(170, 25, 300, 300);
         cropPlugin.requireFocus();
         this.addEventListener('core:transformation', function() { 
-            sessionStorage.setItem("editedImage", dkrm.canvas.toDataURL());
+            
+               sessionStorage.setItem("editedImage", dkrm.canvas.toDataURL());
             sessionStorage.setItem("isEdited", "true");
+                    
+            
         });
       }
     });
+      
+      function filters(){
+        var bright = document.getElementById("brightness").value;
+        var contrast = document.getElementById("contrast").value;
+        var sepia =  document.getElementById("sepia").value; 
+        var saturate = document.getElementById("saturate").value;
+        
+        filterString = "brightness(" + bright + "%)" + " contrast(" + contrast + "%)" + " sepia(" + sepia + "%)" + " saturate(" + saturate + "%)";
+          
+          var orig = dkrm.canvas.toDataURL();
+        //var orig = sessionStorage.getItem("editedImage");
+        var ctx = dkrm.canvas.getContext("2d");
+        ctx.filter = filterString;
+       
+        var image = new Image();
+        image.onload = function() {
+            ctx.drawImage(image, 0, 0);
+        }
+        image.src = orig;
+          
+        sessionStorage.setItem("filterS", filterString);
+        console.log(filterString);
+        
+    }
+      
   </script>
 
   <script>

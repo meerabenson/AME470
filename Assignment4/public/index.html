@@ -4,10 +4,12 @@
 <meta name="viewport" content="intial-scale=1.0, user-scalable=no, width=device-width, maximum-scale=1.0"> 
 <script src='asyncReq.js'> </script>
 <script src='https://code.jquery.com/jquery-3.2.0.min.js'> </script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/camanjs/4.0.0/caman.full.min.js'> </script>
   <script>
       
     var currentId = 0;
     var isEdited = false;
+    var fString = "";
       
     function editImage(){
       var url = document.getElementById("enlarge").src.replace('url("', "").replace('")','');
@@ -19,9 +21,10 @@
       var name = prompt("Enter the image name:");
       var photoURL = prompt("Enter the image URL:");
       var id = new Date().getTime();
+      var noFilter = "brightness(100%) contrast(100%) sepia(0%) saturate(100%)";
       
       if (name != null && photoURL != null) {
-      var url = "./addTodo" + "?id=" + id + "&name=" + name + "&url=" + photoURL;
+      var url = "./addTodo" + "?id=" + id + "&name=" + name + "&url=" + photoURL + "&filters=" + noFilter;
       loadFile(url ,function(d){
         formatTodos(JSON.parse(d));
       });
@@ -35,6 +38,7 @@
           formatTodos(JSON.parse(d));
         });
         document.getElementById("enlarge").style.display = 'none';
+        document.getElementById("enlarge").style.filter = 'none';
         document.getElementById("picName").style.display = 'none';
         document.getElementById("buttons").style.display = 'none';
           
@@ -75,9 +79,15 @@
         markup = "No pictures yet"
       }
       else{
+                    
         for(var i = 0; i < list.length; i++){
             var a = list[i].url;
-          markup += "<li class='thumbnails' id='" + list[i].id + "' onclick='showLarger(\"" + list[i].url + "\", \"" + list[i].name + "\", \"" + list[i].id + "\")'> <div id='" + list[i].id + "' class='thumb' style='background-image:url(" + list[i].url + "')> </div> </br> <div style='height:41.5px'> &nbsp &nbsp" + list[i].name + 
+            console.log(list[i].filters);
+            var f = list[i].filters.split("%20");
+            var filt = f[0] + " " + f[1] + " " + f[2] + " " + f[3];
+            console.log(filt);
+            
+          markup += "<li class='thumbnails' id='" + list[i].id + "' onclick='showLarger(\"" + list[i].url + "\", \"" + list[i].name + "\", \"" + list[i].filters + "\", \"" + list[i].id + "\")'> <div id='" + list[i].id + "' class='thumb' style='filter:" + filt + "; background-image:url(" + list[i].url + "')> </div> </br> <div style='height:41.5px'> &nbsp &nbsp" + list[i].name + 
             "</div> </li><br/>";             
         }
       }
@@ -131,6 +141,7 @@
     {
        parseUA();
        console.log(currentId); document.getElementById("buttons").style.display = 'none'; 
+       document.getElementById("filterSliders").style.display = 'none'; 
         
       var url = "./getTodos";
       loadFile(url ,function(d){
@@ -139,10 +150,15 @@
       })
     }
       
-      function showLarger(url, name, id)
+      function showLarger(url, name, filter, id)
     {
       console.log(name, id);
         var thumbs = document.getElementsByClassName("thumbnails"), i, len;
+        
+        var f = filter.split("%20");
+        var filt = f[0] + " " + f[1] + " " + f[2] + " " + f[3];
+        document.getElementById("enlarge").style.filter = filt;
+        
         document.getElementById("enlarge").src=url;
         document.getElementById("picName").innerHTML = name;
         
@@ -183,20 +199,21 @@
         var name = prompt("Enter the image name:");
       var photoURL = "https://s3-us-west-2.amazonaws.com/ame470s17/" + fileInput;
       var id = new Date().getTime();
-      
+      var noFilter = "brightness(100%) contrast(100%) sepia(0%) saturate(100%)";
       
       if (name != null && photoURL != null) {
-      var url = "./addTodo" + "?id=" + id + "&name=" + name + "&url=" + photoURL;
+      var url = "./addTodo" + "?id=" + id + "&name=" + name + "&url=" + photoURL  + "&filters=" + noFilter;
       loadFile(url ,function(d){
         formatTodos(JSON.parse(d));
       });
       }
         
-        document.getElementById("theFileUploader").src = ""; //photoURL;
+    document.getElementById("theFileUploader").src = ""; //photoURL;
         
     }
     
     function saveImageEdit(){
+        
       if(sessionStorage.getItem("isEdited") == "true"){
          var fd = new FormData();
          var fileInput = document.getElementById("enlarge").src.split("ame470s17/")[1];
@@ -217,7 +234,8 @@
           
           //update thumbnail
           document.getElementById(currentId).src = "https://s3-us-west-2.amazonaws.com/ame470s17/" + fileInput + "?t=" + new Date().getTime(); ;
-      }
+      };
+        
     }
       
     function cancelImageEdit()
@@ -227,10 +245,40 @@
     }
     function editImage(){
       var url = document.getElementById("enlarge").src;
-      document.getElementById("DRFrame").src = "./demo/index.html#" + url;
+      document.getElementById("DRFrame").src = "./demo/index.html#" + url; //changed here
       document.getElementById("editWrapper").style.display = "block";
       sessionStorage.setItem("isEdited", "false");
     }
+      
+    
+      
+    function applyFilters() {
+        document.getElementById("filterSliders").style.display = 'block'; 
+        
+        var bright = document.getElementById("brightness").value;
+        var contrast = document.getElementById("contrast").value;
+        var sepia =  document.getElementById("sepia").value; 
+        var saturate = document.getElementById("saturate").value;
+        
+        fString = "brightness(" + bright + "%)" + " contrast(" + contrast + "%)" + " sepia(" + sepia + "%)" + " saturate(" + saturate + "%)";
+        
+        document.getElementById("enlarge").style.filter = fString;
+        console.log(fString);
+        /*document.getElementById("enlarge").style.filter = "brightness(" + bright + "%)"; document.getElementById("enlarge").style.filter = "contrast(" + contrast + "%)"; document.getElementById("enlarge").style.filter = "sepia(" + sepia + "%)"; document.getElementById("enlarge").style.filter = "saturate(" + saturate + "%)";*/
+        
+    }
+      
+    function doneFilters() {
+       
+        var url = "./saveFilters" + "?id=" + currentId + "&filters=" + fString;
+        loadFile(url ,function(d){
+        formatTodos(JSON.parse(d));
+        });
+        document.getElementById("filterSliders").style.display = 'none'; 
+        
+        document.getElementById(currentId).style.filter = fString;
+    }
+    
       
   </script>
   <style>
@@ -330,16 +378,42 @@
         <br/>
        <div id='buttons'><button id='rename' onclick='rename(currentId)' style='margin: 0px auto'>Rename</button>
         <button id='edit' onclick='editImage()' style='margin: 0px auto'>Edit</button>
-       <button id='delete' onclick='deleteTodo(currentId)' style='margin: 0px auto'>Delete</button></div>
+       <button id='delete' onclick='deleteTodo(currentId)' style='margin: 0px auto'>Delete</button>       <button id='filters' onclick='applyFilters()' style='margin: 0px auto'>Filters</button>
+        
+        <br/><br/>
+        <div id="filterSliders">Brightness <input type="range" onchange="applyFilters()" id="brightness" min="0" max="200" step="20" value="100"> <br/>
+        Saturate <input type="range" onchange="applyFilters()" id="saturate" min="0" max="200" step="20" value="100"> <br/>
+        Sepia <input type="range" onchange="applyFilters()" id="sepia" min="0" max="100" step="10" value="0"> <br/>
+        Contrast <input type="range" onchange="applyFilters()" id="contrast" min="0" max="200" step="20" value="100"> <br/> <br/>
+        <button onclick="doneFilters()">Done</button>
+        </div>
+        
+        </div>
+        
+        
+        
        </center>
    </div>
     
     <div id='editWrapper'>
         <button style='' onclick='saveImageEdit()'>Save</button>
-        <button style='position: inherit' onclick='cancelImageEdit()'>Cancel</button>
+        <button style='position: inherit' onclick='cancelImageEdit()'>Cancel</button><br/>
         <iframe crossorigin='anonymous' id='DRFrame'></iframe>
-        
+
     </div>
   
 </body>
 </html>
+
+
+<!--
+var orig = dkrm.canvas.toDataURL();
+var ctx = dkrm.canvas.getContext("2D");
+ctx.filter = "sepia(50%)";
+var image = new Image();
+image.onload = function() {
+    ctx.drawImage(orig, 0, 0);
+}
+image.src = orig;
+-->
+

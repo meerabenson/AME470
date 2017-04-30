@@ -137,6 +137,13 @@ server.post('/uploadFile', function(req, res){
         });
   });
 
+server.get("/saveFilters", function (req, res) {
+  var i = req.query.id.toString();
+  var filt = req.query.filters.toString();
+    
+  db.collection("data").update({id: i}, {$set: {filters: filt}});
+});
+
 
 server.use(methodOverride());
 server.use(bodyParser());
